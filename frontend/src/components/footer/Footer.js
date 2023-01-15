@@ -39,9 +39,9 @@ const Footer = () => {
               </a>
             </li>
             <li >
-              <a href="mailto:ermohdshari@gmail.com" 
+              <a href="mailto:ermohdsharif@gmail.com" 
               target="_blank" rel="noreferrer" className="list_item">
-              <MailIcon/> ermohdshari@gmail.com
+              <MailIcon/> ermohdsharif@gmail.com
               </a>
             </li>
             
