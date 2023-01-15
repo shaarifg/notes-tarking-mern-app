@@ -44,6 +44,7 @@ const Form = () => {
             name="title"
             value={formData.title}
             onChange={handleChange}
+            required
           />
         </div>
         <div className="textarea">
