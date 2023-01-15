@@ -1,0 +1,11 @@
+#nav{
+    background-color: var(---second-primary-color);
+    color: #FFF;
+    padding: .4rem;
+}
+
+.logo{
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: center;
+}
