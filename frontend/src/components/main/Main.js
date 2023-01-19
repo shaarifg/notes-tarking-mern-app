@@ -1,32 +1,57 @@
 import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useState } from "react";
-import { deleteNote } from "../../redux/actions/noteActions";
+import { useEffect, useState } from "react";
+import { deleteNote, setNotes } from "../../redux/actions/noteActions";
+import axios from "axios";
+
+import SendIcon from "@mui/icons-material/Send";
 
 import "./main.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Share from "../Share";
 
-const initialValues = {
-  title: "",
-  note: "",
-};
 export const Main = () => {
+  const [share, setShare] = useState(false);
   const notes = useSelector((state) => state.allNotes.notes);
   console.log(notes);
-  const [formData, setFormData] = useState(initialValues);
+  const [formData, setFormData] = useState({ note:'', title:'' });
+  console.log(Object.keys(formData).length);
   const dispatch = useDispatch();
+  console.log(formData);
 
-  const handleChange = (e) => {
+  const handleChange = (e, id) => {
+    console.log(e, id)
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleDelete = (id) => {
-    console.log("Sja");
-    console.log(id);
-    dispatch(deleteNote(id));
+  const handleDelete = async (index, id1) => {
+    console.log(id1);
+    await axios.delete(`http://localhost:3002/note/${id1}`).then((res) => {
+      toast.success(res.data.message, {
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+      });
+      dispatch(deleteNote(index));
+    });
   };
+
+  const handleShare = (note, title) => {};
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      await axios
+        .get(`http://localhost:3002/notes`)
+        .then((response) => dispatch(setNotes(response.data.notes)))
+        .catch((error) => console.log(error));
+    };
+    fetchNotes();
+    // eslint-disable-next-line
+  }, []);
   return (
     <main id="main" className="container">
       <div className="notes_card">
@@ -36,30 +61,38 @@ export const Main = () => {
           notes.map((note, index) => {
             return (
               <div key={index} className="note_item">
-                <input type="text" value={note.title} onChange={handleChange} />
+                <input type="text" name='title' value={
+                  `{${Object.keys(formData).length}===0}` ? note.title : formData.title
+                }
+                onChange={(e)=>handleChange(e, note._id)}
+                onClick={() => setFormData(note)} />
                 <textarea
-                  name="textarea"
-                  id=""
+                  name="note"
                   cols="30"
                   rows="10"
-                  value={note.note}
-                  onChange={handleChange}
+                  value={
+                    `{${Object.keys(formData).length}===0}` ? note.note : formData.note
+                  }
+                  onChange={(e)=>handleChange(e, note._id)}
+                  onClick={() => setFormData(note)}
                 ></textarea>
-                <div className="button_wrapper">
+                <div className="buttons_wrapper">
                   <button
-                    onClick={() => handleDelete(index)}
+                    onClick={() => handleDelete(index, note._id)}
                     title="DELETE"
                     className="del_btn"
                   >
                     <DeleteIcon
-                      sx={{ fontSize: "2rem", verticalAlign: "middle" }}
+                      sx={{ fontSize: "1.5rem", verticalAlign: "middle" }}
                     />
                   </button>
+                  <Share props={note} />
                 </div>
               </div>
             );
           })
         )}
+        <ToastContainer />
       </div>
     </main>
   );

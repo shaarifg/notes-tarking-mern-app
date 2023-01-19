@@ -11,6 +11,11 @@ const initialState = {
 
 export const notesReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case ACTIONS.SET_NOTES:
+      return {
+        ...state,
+        notes: payload
+      };
     case ACTIONS.ADD_NOTE:
       return {
         ...state,

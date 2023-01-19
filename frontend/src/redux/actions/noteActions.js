@@ -1,5 +1,12 @@
 import { ACTIONS } from "../constants/types"
 
+
+export const setNotes = (data)=>{
+    return{
+        type:ACTIONS.SET_NOTES,
+        payload:data
+    }
+}
 export const addNote =(data)=>{
     return{
         type:ACTIONS.ADD_NOTE,

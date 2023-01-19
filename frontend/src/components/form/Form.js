@@ -1,32 +1,37 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addNote } from "../../redux/actions/noteActions";
 import AddIcon from "@mui/icons-material/Add";
 
 import "./form.css";
+import axios from "axios";
 const initialValues = {
   title: "",
   note: "",
 };
 
 const Form = () => {
-  const notes = useSelector((state) => state.allNotes.notes);
-  // console.log(notes);
   const [formData, setFormData] = useState(initialValues);
-
   const dispatch = useDispatch();
 
-  const handleAddNote = (e) => {
+  const handleAddNote = async (e) => {
     e.preventDefault();
-    localStorage.setItem("notes", JSON.stringify(notes));
-    if (formData.title.length > 0) {
-      dispatch(addNote(formData));
+    if (formData.title.trim().length > 0) {
+      await axios.post(`http://localhost:3002/notes`, {
+        title:formData.title.trim(),
+        note:formData.note.trim()
+      });
+      dispatch(addNote({
+        title:formData.title.trim(),
+        note:formData.note.trim()
+      }));
       setFormData(initialValues);
     } else {
       alert("Please Enter Title");
     }
-    // console.log("Sharif");
   };
+
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
