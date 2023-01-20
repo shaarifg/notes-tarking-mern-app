@@ -15,12 +15,8 @@ const connectDatabase = ()=>{
     })
 }
 
-const getDbConnection =()=>{
-    return mongoose.connection
-}
 
 
 module.exports ={
-    connectDatabase,
-    getDbConnection
+    connectDatabase
 }

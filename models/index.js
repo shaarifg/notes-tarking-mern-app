@@ -1,1 +1,1 @@
-module.exports = require('./notesModel/notes.entity')
+module.exports = require('./notes.entity')
