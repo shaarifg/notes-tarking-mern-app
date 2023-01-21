@@ -15,11 +15,10 @@ app.use(cors({
 
 app.use('/', routes)
 
-const connectDb = () =>{
-    db.connectDatabase()
-}
 
-connectDb();
+db.connectDatabase()
+
+
 
 app.listen(serverConfig.port, serverConfig.hostname, ()=>{
     console.log(`Server is running on http://${serverConfig.hostname}:${serverConfig.port}`);
